@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendDev", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "http://localhost:8080")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -41,8 +41,12 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddSingleton<IFileStorage, LocalFileStorage>();
 
 // JWT Authentication
-var jwtKey = configuration["Jwt:Key"] ?? "VerySecretKeyChangeThis";
+var jwtKey = configuration["Jwt:Key"] ?? "VerySecretKeyChangeThis_AtLeast32Chars!";
 var keyBytes = System.Text.Encoding.UTF8.GetBytes(jwtKey);
+if (keyBytes.Length < 32)
+{
+    throw new InvalidOperationException("JWT key must be at least 32 bytes for HS256.");
+}
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -89,6 +93,39 @@ using (var scope = app.Services.CreateScope())
         db.Users.Add(admin);
         db.SaveChanges();
     }
+
+    var defaultCategories = new[]
+    {
+        (Name: "Birthday", Slug: "birthday", SortOrder: 1),
+        (Name: "Wedding", Slug: "wedding", SortOrder: 2),
+        (Name: "Anniversary", Slug: "anniversary", SortOrder: 3),
+        (Name: "Valentines Day", Slug: "valentines-day", SortOrder: 4),
+        (Name: "Sympathy", Slug: "sympathy", SortOrder: 5),
+        (Name: "Congratulations", Slug: "congratulations", SortOrder: 6),
+    };
+
+    var existingCategorySlugs = db.Categories
+        .Select(c => c.Slug)
+        .ToHashSet();
+
+    var categoriesToAdd = defaultCategories
+        .Where(category => !existingCategorySlugs.Contains(category.Slug))
+        .Select(category => new Category
+        {
+            Id = Guid.NewGuid(),
+            Name = category.Name,
+            Slug = category.Slug,
+            SortOrder = category.SortOrder,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        })
+        .ToList();
+
+    if (categoriesToAdd.Count > 0)
+    {
+        db.Categories.AddRange(categoriesToAdd);
+        db.SaveChanges();
+    }
 }
 
 // Configure the HTTP request pipeline.
@@ -99,7 +136,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 // Serve static files (uploads)
 app.UseStaticFiles();
@@ -113,5 +153,3 @@ app.MapControllers();
 
 app.Run();
 
-
-// ...existing code...

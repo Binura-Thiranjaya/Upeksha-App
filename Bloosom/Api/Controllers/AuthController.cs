@@ -36,9 +36,13 @@ public class AuthController : ControllerBase
             return Unauthorized(new { error = "Invalid email or password" });
         }
 
-        var jwtKey = _configuration["Jwt:Key"] ?? "VerySecretKeyChangeThis";
+        var jwtKey = _configuration["Jwt:Key"] ?? "VerySecretKeyChangeThis_AtLeast32Chars!";
         var jwtIssuer = _configuration["Jwt:Issuer"] ?? "floara.local";
         var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
+        if (keyBytes.Length < 32)
+        {
+            return StatusCode(500, new { error = "JWT configuration is invalid" });
+        }
         var credentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Bloosom")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+180145b7a6300b9dd771aebb1e4f14d06e77b6de")]
 [assembly: System.Reflection.AssemblyProductAttribute("Bloosom")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Bloosom")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -169,3 +169,5 @@ C:\Users\BinuraMadoluwage\Downloads\Projects\Floora\Bloosom\Bloosom\obj\Debug\ne
 C:\Users\BinuraMadoluwage\Downloads\Projects\Floora\Bloosom\Bloosom\obj\Debug\net9.0\Bloosom.pdb
 C:\Users\BinuraMadoluwage\Downloads\Projects\Floora\Bloosom\Bloosom\obj\Debug\net9.0\Bloosom.genruntimeconfig.cache
 C:\Users\BinuraMadoluwage\Downloads\Projects\Floora\Bloosom\Bloosom\obj\Debug\net9.0\ref\Bloosom.dll
+C:\Users\BinuraMadoluwage\Downloads\Projects\Floora\Bloosom\Bloosom\obj\Debug\net9.0\Bloosom.sourcelink.json
+C:\Users\BinuraMadoluwage\Downloads\Projects\Floora\Bloosom\Bloosom\bin\Debug\net9.0\Bloosom.staticwebassets.runtime.json
